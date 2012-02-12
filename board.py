@@ -57,6 +57,7 @@ class board:
             if ((move[0] > -1 and move[0] < self.width) 
             and (move[1] > -1 and move[1] < self.height)
             and not(self.contains(move[0], move[1]))): # TODO fix for jumping
+                print "iterWhitePiece: from piece", piece, "we are going to try", move
                 yield (piece, move)
     
     # Creates an iterable list of moves for a black piece
@@ -69,7 +70,7 @@ class board:
             if ((move[0] > -1 and move[0] < self.width)
             and (move[1] > -1 and move[1] < self.height)
             and not(self.contains(move[0], move[1]))): # TODO fix for jumping
-                print "from piece", piece, "we are going to try", move
+                print "iterBlackPiece: from piece", piece, "we are going to try", move
                 yield (piece, move)
             else:
                 print move, "was eliminated"

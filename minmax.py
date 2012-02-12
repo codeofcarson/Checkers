@@ -27,12 +27,13 @@ def maxMove(board, currentDepth, maxDepth):
         # Depending on the turn, we create an iterator for the appropriate player
         #print board.turn
         if board.turn == 1: # Black
-            moves = board.iterBlackMoves()
+            movesB = board.iterBlackMoves()
             #print "moves", moves
-            for move in moves:
-                print "Move", move
+            for move in movesB:
                 #board.moveSilentBlack(*move)
-                print "*********BLACKS MOVE*********"
+                print "*********BLACKS MAX MOVE*********"
+                print "Move", move
+                board.updateBoard()
                 board.moveBlack(*move)
                 (board, value) = minMove(board, currentDepth+1, maxDepth)
                 if value > bestMove:
@@ -40,10 +41,11 @@ def maxMove(board, currentDepth, maxDepth):
                     bestBoard = board
             return (bestBoard, bestMove)
         else: # White
-            moves = board.iterWhiteMoves()
-            for move in moves:
+            movesW = board.iterWhiteMoves()
+            for move in movesW:
                 #board.moveSilentWhite(*move)
-                print "*********WHITES MOVE*********"
+                print "*********WHITES MIN MOVE*********"
+                print "Move", move
                 board.moveWhite(*move)
                 (board, value) = minMove(board, currentDepth+1, maxDepth)
                 if value > bestMove:
@@ -75,7 +77,7 @@ def minMove(board, currentDepth, maxDepth):
             moves = board.iterBlackMoves()
             for move in moves:
                 #board.moveSilentBlack(*move)
-                print "*********BLACKS MOVE*********"
+                print "*********BLACKS MIN MOVE*********"
                 board.moveBlack(*move)
                 (board, value) = maxMove(board, currentDepth+1, maxDepth)
                 board.updateBoard()
@@ -87,7 +89,7 @@ def minMove(board, currentDepth, maxDepth):
             moves = board.iterWhiteMoves()
             for move in moves:
                 #board.moveSilentWhite(*move)
-                print "*********WHITES MOVE*********"
+                print "*********WHITES MIN MOVE*********"
                 board.moveWhite(*move)
                 (board, value) = maxMove(board, currentDepth+1, maxDepth)
                 board.updateBoard()
