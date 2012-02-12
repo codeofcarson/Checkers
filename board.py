@@ -16,7 +16,10 @@ class board:
         # boardState contains the current state of the board for printing/eval
         self.boardState = [[' '] * self.width for x in range(self.height)]
         self.gameWon = False
-        self.turn = 0 # 0 = white, 1 = black
+        self.WHITE = 0
+        self.BLACK = 1
+        self.turn = self.WHITE
+        
     
     # Returns True if there is a piece at that position 
     def contains(self, x, y):
@@ -38,7 +41,9 @@ class board:
                 
     def iterBlackMoves(self):
         for piece in self.blacklist:
+            #print piece
             for move in self.iterBlackPiece(piece):
+                #print move
                 yield move
         
     # Creates an iterable list of moves for a white piece
@@ -51,19 +56,23 @@ class board:
             # a location where another piece is already located
             if ((move[0] > -1 and move[0] < self.width) 
             and (move[1] > -1 and move[1] < self.height)
-            and not(self.contains(piece[0], piece[1]))): # TODO fix for jumping
-                yield move
+            and not(self.contains(move[0], move[1]))): # TODO fix for jumping
+                yield (piece, move)
     
     # Creates an iterable list of moves for a black piece
     def iterBlackPiece(self, piece):
         # White pieces can only move up the board
         possibleMove1 = (piece[0]+1, piece[1]+1)
         possibleMove2 = (piece[0]-1, piece[1]+1)
+        print "possible moves for", piece, ":", possibleMove1, possibleMove2
         for move in (possibleMove1, possibleMove2):
             if ((move[0] > -1 and move[0] < self.width)
             and (move[1] > -1 and move[1] < self.height)
-            and not(self.contains(piece[0], piece[1]))): # TODO fix for jumping
-                yield move
+            and not(self.contains(move[0], move[1]))): # TODO fix for jumping
+                print "from piece", piece, "we are going to try", move
+                yield (piece, move)
+            else:
+                print move, "was eliminated"
     
     # Updates the array containing the board to reflect the current state
     # of the pieces on the board
@@ -75,29 +84,31 @@ class board:
             self.boardState[piece[1]][piece[0]] = u'◆'
         for piece in self.whitelist:
             self.boardState[piece[1]][piece[0]] = u'◇'
-        self.turn = self.turn + 1  
 
     # Move a blackPiece from one spot to another
-    def moveBlackPiece(self, piece, move): 
+    def moveBlack(self, moveFrom, moveTo): 
         #TODO add better limits to bad move checking
-        if ((move[0] > -1 and move[0] < self.width)
-            and (move[1] > -1 and move[1] < self.height)
-            and not(self.contains(move[0], move[1]))):
-                self.blacklist[self.blacklist.index(piece)] = move
+        if ((moveTo[0] > -1 and moveTo[0] < self.width)
+            and (moveTo[1] > -1 and moveTo[1] < self.height)
+            and not(self.contains(moveTo[0], moveTo[1]))):
+                self.blacklist[self.blacklist.index(moveFrom)] = moveTo
                 self.printBoard()
+                self.turn = self.WHITE
         else:
-            print("Not a valid move dickweed!")
+            raise Exception("Not a valid move dickweed!")
         
-    def moveWhitePiece(self, piece, move):
+    def moveWhite(self, piece, move):
         #TODO add better limits to bad move checking
         if ((move[0] > -1 and move[0] < self.width)
             and (move[1] > -1 and move[1] < self.height)
             and not(self.contains(move[0], move[1]))):
                 self.whitelist[self.whitelist.index(piece)] = move
                 self.printBoard()
+                self.turn = self.BLACK
         else:
-            print("Not a valid move dickweed!")
-            
+            raise Exception("Not a valid move dickweed!")
+    
+    
     def printBoard(self):
         print unicode(self)
         
@@ -123,6 +134,28 @@ class board:
         lines.append(u'  ╰' + (u'───┴' * (self.width-1)) + u'───╯')
         return '\n'.join(lines)
 
+    # Move without printing
+    def moveSilentBlack(self, piece, move): 
+        #TODO add better limits to bad move checking
+        if ((move[0] > -1 and move[0] < self.width)
+            and (move[1] > -1 and move[1] < self.height)
+            and not(self.contains(move[0], move[1]))):
+                self.blacklist[self.blacklist.index(piece)] = move
+                self.updateBoard()
+                self.turn = self.WHITE
+        else:
+            raise Exception("Not a valid move dickweed!")
+        
+    def moveSilentWhite(self, piece, move):
+        #TODO add better limits to bad move checking
+        if ((move[0] > -1 and move[0] < self.width)
+            and (move[1] > -1 and move[1] < self.height)
+            and not(self.contains(move[0], move[1]))):
+                self.whitelist[self.whitelist.index(piece)] = move
+                self.updateBoard()
+                self.turn = self.BLACK
+        else:
+            raise Exception("Not a valid move dickweed!")
 
 #    def print_blank(self):
 #        print blankboard(self)
