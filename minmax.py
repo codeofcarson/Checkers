@@ -13,10 +13,13 @@ def maxMove(board, currentDepth, maxDepth):
     elif board.turn == board.BLACK:
         print "!!It is BLACKS turn!!"
     else:
-        print "!!!!!!!!!!!WHAT THE FUCKING CHRIST IS GOING ON!!!!!!!!!!"
+        print "!!!!!!!!!!!WHAT THE FUCKING CHRIST IS GOING ON???!!!!!!!"
     board = deepcopy(board)
-    if board.gameWon or (currentDepth > maxDepth):
-        print "game status is", board.gameWon, "current depth is", currentDepth
+    if board.gameWon or (currentDepth >= maxDepth):
+        if board.gameWon:
+            print "game was won"
+        elif currentDepth >= maxDepth:
+            print "Current Depth exceeds max Depth. Returning original Board"
         return (board, staticEval(board))
     else:
         bestMove = float("-inf")
@@ -37,10 +40,10 @@ def maxMove(board, currentDepth, maxDepth):
                     bestBoard = board
             return (bestBoard, bestMove)
         else: # White
-            print "*********WHITES MOVE*********"
             moves = board.iterWhiteMoves()
             for move in moves:
                 #board.moveSilentWhite(*move)
+                print "*********WHITES MOVE*********"
                 board.moveWhite(*move)
                 (board, value) = minMove(board, currentDepth+1, maxDepth)
                 if value > bestMove:
@@ -56,33 +59,38 @@ def minMove(board, currentDepth, maxDepth):
     elif board.turn == board.BLACK:
         print "!!It is BLACKS turn!!"
     else:
-        print "!!!!!!!!!!!WHAT THE FUCKING CHRIST IS GOING ON!!!!!!!!!!"
+        print "!!!!!!!!!!!WHAT THE FUCKING CHRIST IS GOING ON???!!!!!!!"
     board = deepcopy(board)
-    if board.gameWon or (currentDepth > maxDepth):
-        print "game status is", board.gameWon, "current depth is", currentDepth
+    if board.gameWon or (currentDepth >= maxDepth):
+        if board.gameWon:
+            print "game was won"
+        elif currentDepth >= maxDepth:
+            print "Current Depth exceeds max Depth. Returning original Board"
         return (board, staticEval(board))
     else:
         bestMove = float("inf")
         bestBoard = None 
         # Depending on the turn, we create an iterator for the appropriate player
         if board.turn == 1: # Black
-            print "*********BLACKS MOVE*********"
             moves = board.iterBlackMoves()
             for move in moves:
                 #board.moveSilentBlack(*move)
+                print "*********BLACKS MOVE*********"
                 board.moveBlack(*move)
                 (board, value) = maxMove(board, currentDepth+1, maxDepth)
+                board.updateBoard()
                 if value < bestMove:
                     bestMove = value
                     bestBoard = board
             return (bestBoard, bestMove)
         else: # White
-            print "*********WHITES MOVE*********"
             moves = board.iterWhiteMoves()
             for move in moves:
                 #board.moveSilentWhite(*move)
+                print "*********WHITES MOVE*********"
                 board.moveWhite(*move)
                 (board, value) = maxMove(board, currentDepth+1, maxDepth)
+                board.updateBoard()
                 if value < bestMove:
                     bestMove = value
                     bestBoard = board

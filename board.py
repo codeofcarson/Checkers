@@ -88,26 +88,38 @@ class board:
     # Move a blackPiece from one spot to another
     def moveBlack(self, moveFrom, moveTo): 
         #TODO add better limits to bad move checking
-        if ((moveTo[0] > -1 and moveTo[0] < self.width)
-            and (moveTo[1] > -1 and moveTo[1] < self.height)
-            and not(self.contains(moveTo[0], moveTo[1]))):
-                self.blacklist[self.blacklist.index(moveFrom)] = moveTo
-                self.printBoard()
-                self.turn = self.WHITE
-        else:
-            raise Exception("Not a valid move dickweed!")
+        if (moveTo[0] > -1 and moveTo[0] < self.width):
+            if (moveTo[1] > -1 and moveTo[1] < self.height):
+                if not(self.contains(moveTo[0], moveTo[1])):
+                    try:
+                        self.blacklist[self.blacklist.index(moveFrom)] = moveTo
+                    except ValueError:
+                        print "The piece causing the error is", moveFrom
+                        print "it was trying to move to", moveTo
+                    self.printBoard()
+                    self.turn = self.WHITE
+                else:
+                    print "Black Piece", moveFrom, "moving to", moveTo
+                    raise Exception("MoveTo location already contains a piece!")
         
-    def moveWhite(self, piece, move):
+    def moveWhite(self, moveFrom, moveTo):
         #TODO add better limits to bad move checking
-        if ((move[0] > -1 and move[0] < self.width)
-            and (move[1] > -1 and move[1] < self.height)
-            and not(self.contains(move[0], move[1]))):
-                self.whitelist[self.whitelist.index(piece)] = move
-                self.printBoard()
-                self.turn = self.BLACK
+        if (moveTo[0] > -1 and moveTo[0] < self.width):
+            if (moveTo[1] > -1 and moveTo[1] < self.height):
+                print "The square we are moving to contains a piece", self.contains(moveTo[0], moveTo[1])
+                print "White Piece", moveFrom, "moving to", moveTo
+                if not(self.contains(moveTo[0], moveTo[1])):
+                    #print "HERE"
+                    self.whitelist[self.whitelist.index(moveFrom)] = moveTo
+                    self.printBoard()
+                    self.turn = self.BLACK
+                else:
+                    print "White Piece", moveFrom, "moving to", moveTo
+                    raise Exception("MoveTo location already contains a piece!")
+            else:
+                print "I'M A DICK AND I TRIED TO MOVE OUT OF BOUNDS! FALALAH!"
         else:
-            raise Exception("Not a valid move dickweed!")
-    
+            print "I'M A DICK AND I TRIED TO MOVE OUT OF BOUNDS! FALALAH!"
     
     def printBoard(self):
         print unicode(self)
@@ -124,11 +136,13 @@ class board:
         
         # Print the boards rows
         for num, row in enumerate(self.boardState[:-1]):
-            lines.append(chr(num+65) + u' │ ' + u' │ '.join(row) + u' │')
+            #lines.append(chr(num+65) + u' │ ' + u' │ '.join(row) + u' │')
+            lines.append(str(num) + u' │ ' + u' │ '.join(row) + u' │')
             lines.append(u'  ├' + (u'───┼' * (self.width-1)) + u'───┤')
         
         #Print the last row
-        lines.append(chr(self.height+64) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │')
+        #lines.append(chr(self.height+64) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │')
+        lines.append(str(self.height-1) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │')
 
         # Prints the final line in the board
         lines.append(u'  ╰' + (u'───┴' * (self.width-1)) + u'───╯')
