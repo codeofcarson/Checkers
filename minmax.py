@@ -5,24 +5,42 @@ def minMax(board, maxDepth):
     return maxMove(board, currentDepth, maxDepth)
     
 def maxMove(board, currentDepth, maxDepth):
-    if (board.isWon() or currentDepth >= maxDepth):
+    if board.gameWon or currentDepth >= maxDepth:
         return staticEval(board)
     else:
-        bestMove = []
+        bestMove = ()
         moves = []
-        generateMoves(moves) # x = iterWhiteMoves()
-        for move in moves: # moves.next()
+        
+        # Depending on the turn, we create an iterator for the appropriate player
+        if board.turn == 1: # White
+            moves = board.iterBlackMoves()
+        else: # Black
+            moves = board.iterWhiteMoves()
+        
+        for move in moves.next():
             move = minMove(testMove(board))
-            if (staticEval(move) > staticEval(bestMove)
+            if staticEval(move) > staticEval(bestMove):
                 bestMove = move
         return bestMove
         
 def minMove(board, currentDepth, maxDepth):
-    if (board.isWon() or currentDepth >= maxDepth):
-        return
+    bestMove = ()
+    moves = []
+    
+    # Depending on the turn, we create an iterator for the appropriate player
+    if board.turn == 1: # White
+        moves = board.iterBlackMoves() # generateMoves(moves)
+    else:
+        moves = board.iterWhiteMoves()
+    
+    for move in moves.next():
+        move = maxMove(board.move)
+        if staticEval(move) > staticEval(bestMove):
+            bestMove = move
+    return bestMove
     
 def staticEval(board):
-    pass
+    return 0
 
 #    MinMax (GamePosition game) {
 #      return MaxMove (game);
