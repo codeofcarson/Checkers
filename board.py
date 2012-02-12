@@ -140,7 +140,11 @@ class board:
         if ((move[0] > -1 and move[0] < self.width)
             and (move[1] > -1 and move[1] < self.height)
             and not(self.contains(move[0], move[1]))):
-                self.blacklist[self.blacklist.index(piece)] = move
+                try:
+                    self.blacklist[self.blacklist.index(piece)] = move
+                except ValueError:
+                    print "The piece causing the error is", piece
+                    print "it was trying to move to", move
                 self.updateBoard()
                 self.turn = self.WHITE
         else:
@@ -157,9 +161,11 @@ class board:
         else:
             raise Exception("Not a valid move dickweed!")
 
+
+
+
 #    def print_blank(self):
 #        print blankboard(self)
-
 ## FOR BLANK BOARD ONLY
 #    def __blankboard__(self):
 #        lines = []
