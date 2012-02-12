@@ -88,7 +88,7 @@ class board:
         else:
             print("Not a valid move dickweed!")
         
-    def moveWhitePiece(self, piece, move): 
+    def moveWhitePiece(self, piece, move):
         #TODO add better limits to bad move checking
         if ((move[0] > -1 and move[0] < self.width)
             and (move[1] > -1 and move[1] < self.height)
