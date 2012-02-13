@@ -2,7 +2,7 @@
 # These 
 # Main class runs the game
 from board import *
-from minmax import *
+from minmaxSAM import *
 
 # define auxilary methods
 # Gets the move from the User
@@ -52,6 +52,7 @@ height = 6
 maxDepth = 5
 
 b = board(width, height)
+mm = Minimax(b)
 b.printBoard()
 print("Welcome to checkers. Type help at any time for additional information")
 
@@ -61,8 +62,10 @@ while b.gameWon == -1:
     userMove = getUserMove()
     b.moveWhite(*userMove)
     # Then it is the computers turn
-    temp = minMax(b, maxDepth)
-    b = temp[0]
+    temp = mm.minimax()
+#    print temp
+    b = temp[0].board
+    print b
     print "**********COMPUTER MOVE**********"
     print "best move was", temp[1]
     b.printBoard()
