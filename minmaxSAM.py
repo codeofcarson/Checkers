@@ -53,7 +53,26 @@ class Minimax(object):
             return float('inf')
         elif self.board.gameWon == self.board.WHITE:
             return float('-inf')
-        return 0
+        #return 0
+        score = 0
+        scoremod = 1
+        if self.board.turn == self.board.WHITE:
+            pieces = self.board.whitelist
+            scoremod = -1
+        else:
+            pieces = self.board.blacklist
+        
+        # Bundle AI, tries to keep it's peices as close together as possible        
+        distance = 0
+        for piece1 in pieces:
+            for piece2 in pieces:
+                if piece1 == piece2:
+                    continue
+                dx = abs(piece1[0] - piece2[0])
+                dy = abs(piece1[1] - piece2[1])
+                distance += dx**2 + dy**2
+        distance /= len(pieces)
+        score = 1.0/distance * scoremod
 
     def minimax(self, depth=0, minimum=float('-inf'), maximum=float('inf')):
         """

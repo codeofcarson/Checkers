@@ -63,9 +63,8 @@ while b.gameWon == -1:
     b.moveWhite(*userMove)
     # Then it is the computers turn
     temp = mm.minimax()
-#    print temp
     b = temp[0].board
-    print b
+#    print b
     print "**********COMPUTER MOVE**********"
     print "best move was", temp[1]
     b.printBoard()
