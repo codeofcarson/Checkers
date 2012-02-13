@@ -5,7 +5,10 @@ class board(object):
     BLACK = 1
     WHITE = 0
     NOTDONE = -1
-    def __init__(self, height, width):
+    def __init__(self, height, width, firstPlayer):
+        """
+            Constructs a board, right now maxDepth is statically assigned
+        """
         # Set the height and width of the game board
         self.width = width
         self.height = height
@@ -19,29 +22,42 @@ class board(object):
         # boardState contains the current state of the board for printing/eval
         self.boardState = [[' '] * self.width for x in range(self.height)]
         self.gameWon = self.NOTDONE
-        self.turn = self.WHITE
+        self.turn = firstPlayer
         self.max_depth = 4
     
     # Generate an iterator for all of the moves
     def iterWhiteMoves(self):
+        """
+            Main generator for white moves
+        """
         for piece in self.whitelist:
             for move in self.iterWhitePiece(piece):
                 yield move
                 
     def iterBlackMoves(self):
+        """
+            Main Generator for black moves
+        """
         for piece in self.blacklist:
             for move in self.iterBlackPiece(piece):
                 yield move
                 
     def iterWhitePiece(self, piece):
-        """NEWSHIT"""            
+        """
+            Generates possible moves for a white piece
+        """            
         return self.iterBoth(piece, ((-1,-1),(1,-1)))
     
     def iterBlackPiece(self, piece):
-        """NEWSHIT"""
+        """
+            Generates possible moves for a black piece
+        """
         return self.iterBoth(piece, ((-1,1),(1,1)))
 
     def iterBoth(self, piece, moves):
+        """
+            Handles the actual generation of moves for either black or white pieces
+        """
         for move in moves:
             targetx = piece[0] + move[0]
             targety = piece[1] + move[1]
@@ -69,9 +85,11 @@ class board(object):
                     if not black and not white:
                         yield (piece, jump, self.turn)                   
     
-    # Updates the array containing the board to reflect the current state
-    # of the pieces on the board
     def updateBoard(self):
+        """
+            Updates the array containing the board to reflect the current state of the pieces on the
+            board
+        """
         for i in range(self.width):
             for j in range(self.height):
                 self.boardState[i][j] = " "
@@ -82,7 +100,9 @@ class board(object):
 
     # Movement of pieces
     def moveSilentBlack(self, moveFrom, moveTo, winLoss): 
-        """Move black piece without printing"""
+        """
+            Move black piece without printing
+        """
         if moveTo[0] < 0 or moveTo[0] >= self.width or moveTo[1] < 0 or moveTo[1] >= self.height:
             raise Exception("That would move black piece", moveFrom, "out of bounds")
         black = moveTo in self.blacklist
@@ -92,9 +112,13 @@ class board(object):
             self.updateBoard()
             self.turn = self.WHITE
             self.gameWon = winLoss
+        else:
+            raise Exception
         
     def moveSilentWhite(self, moveFrom, moveTo, winLoss):
-        """Move white piece without printing"""
+        """
+            Move white piece without printing
+        """
         if moveTo[0] < 0 or moveTo[0] >= self.width or moveTo[1] < 0 or moveTo[1] >= self.height:
             raise Exception("That would move white piece", moveFrom, "out of bounds")
         black = moveTo in self.blacklist
@@ -104,14 +128,22 @@ class board(object):
             self.updateBoard()
             self.turn = self.BLACK
             self.gameWon = winLoss
+        else:
+            raise Exception
     
     def moveBlack(self, moveFrom, moveTo, winLoss):
-        """Move a black piece from one spot to another. \n winLoss is passed as either 0(white) or 1(black) if the move is a jump"""
+        """
+            Move a black piece from one spot to another. \n winLoss is passed as either 0(white)
+            or 1(black) if the move is a jump
+        """
         self.moveSilentBlack(moveFrom, MoveTo, winLoss)
         self.printBoard()
         
     def moveWhite(self, moveFrom, moveTo, winLoss):
-        """Move a white piece from one spot to another. \n winLoss is passed as either 0(white) or 1(black) if the move is a jump"""
+        """
+            Move a white piece from one spot to another. \n winLoss is passed as either 0(white)
+            or 1(black) if the move is a jump
+        """
         self.moveSilentWhite(moveFrom, moveTo, winLoss)
         self.printBoard()
 
@@ -119,6 +151,9 @@ class board(object):
         print unicode(self)
         
     def __unicode__(self):
+        """
+            Contains the unicode and other BS for printing the board
+        """
         # Updates Game board
         self.updateBoard()
         lines = []
@@ -130,19 +165,18 @@ class board(object):
         # Print the boards rows
         for num, row in enumerate(self.boardState[:-1]):
             lines.append(chr(num+65) + u' │ ' + u' │ '.join(row) + u' │')
-#            lines.append(str(num) + u' │ ' + u' │ '.join(row) + u' │')
+#            lines.append(str(num) + u' │ ' + u' │ '.join(row) + u' │') # debugging
             lines.append(u'  ├' + (u'───┼' * (self.width-1)) + u'───┤')
         
         #Print the last row
         lines.append(chr(self.height+64) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │')
-#        lines.append(str(self.height-1) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │')
+#        lines.append(str(self.height-1) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │') # debugging
 
         # Prints the final line in the board
         lines.append(u'  ╰' + (u'───┴' * (self.width-1)) + u'───╯')
         return '\n'.join(lines)
 
-#############
-############# FOR DEBUGGING
+############# DEBUGGING
 #############
     def getWin(self):
         return self.g
@@ -155,7 +189,7 @@ class board(object):
     gameWon=property(getWin, setWin)
 #############
 #############
-#############
+
 
 """Deprecated"""
 #    def iterWhitePieceOld(self, piece):

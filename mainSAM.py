@@ -8,6 +8,7 @@ from minmaxSAM import *
 width = 6
 height = 6
 maxDepth = 5
+firstPlayer = 0
 
 # Gets the move from the User
 def getUserMove(b):
@@ -28,6 +29,7 @@ def getUserMove(b):
             print "You do not own", moveFromTup, "please select one of.", b.whitelist
             continue
         break
+
     move = (moveFromTup, moveToTup, -1)
     return move
 
@@ -41,22 +43,27 @@ def getUserMove(b):
 #    + "0 = dead easy:")
 #maxDepth = int(raw_input())
 
-b = board(width, height)
+b = board(width, height, firstPlayer)
 mm = Minimax(b)
 b.printBoard()
-print("Welcome to checkers. Type help at any time for additional information")
+print("Welcome to checkers.")
 
 # Main game loop
 while b.gameWon == -1:
     # First it is the users turn
     userMove = getUserMove(b)
-    b.moveWhite(*userMove)
+    try:
+        b.moveWhite(*userMove)
+    except Exception:
+        print "Invalid move"
+        continue
+        
     # Then it is the computers turn
     temp = mm.minimax()
     b = temp[0].board
 #    print b
     print "**********COMPUTER MOVE**********"
-    print "best move was", temp[1]
+    print "Computers best move was", temp[1]
     b.printBoard()
     if b.gameWon == b.WHITE:
         print "White Wins\nGame Over"

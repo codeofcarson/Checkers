@@ -50,7 +50,11 @@ print("Welcome to checkers. Type help at any time for additional information")
 while b.gameWon == -1:
     # First it is the users turn
     userMove = getUserMove(b)
-    b.moveWhite(*userMove)
+    try:
+        b.moveWhite(*userMove)
+    except Exception:
+        print "Invalid move"
+        continue
     # Then it is the computers turn
     temp = minMax(b, maxDepth)
     b = temp[0]
