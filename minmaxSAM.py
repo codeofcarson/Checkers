@@ -55,12 +55,12 @@ class Minimax(object):
             return float('-inf')
         #return 0
         score = 0
-        scoremod = 1
         if self.board.turn == self.board.WHITE:
             pieces = self.board.whitelist
             scoremod = -1
         else:
             pieces = self.board.blacklist
+            scoremod = 1
         
         # Bundle AI, tries to keep it's peices as close together as possible        
         distance = 0

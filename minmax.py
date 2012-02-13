@@ -108,7 +108,6 @@ def staticEval(board):
         return float('inf')
     elif board.gameWon == board.WHITE:
         return float('-inf')
-    return 0
         
     board.updateBoard()
     score = 0

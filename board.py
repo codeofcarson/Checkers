@@ -22,15 +22,6 @@ class board(object):
         self.turn = self.WHITE
         self.max_depth = 4
     
-    # Returns True if there is a piece at that position 
-    def contains(self, x, y):
-        if ((x,y) in self.blacklist):
-            return True
-        elif ((x,y) in self.whitelist):
-            return True
-        else:
-            return False
-    
     # Generate an iterator for all of the moves
     def iterWhiteMoves(self):
         for piece in self.whitelist:
@@ -191,7 +182,7 @@ class board(object):
 #                                yield (piece, (move[0]+1, move[1]-1), self.WHITE)
 ##                    else:
 ##                        print move, "was eliminated from interWhitePiece"
-
+#
 #    # Creates an iterable list of moves for a black piece
 #    def iterBlackPieceOld(self, piece):
 #        # White pieces can only move up the board
@@ -216,3 +207,12 @@ class board(object):
 #                                    yield (piece, (move[0]+1, move[1]+1), self.BLACK)
 ##                    else:
 ##                        print move, "was eliminated from interBlackPiece"
+#    
+#    # Returns True if there is a piece at that position 
+#    def contains(self, x, y):
+#        if ((x,y) in self.blacklist):
+#            return True
+#        elif ((x,y) in self.whitelist):
+#            return True
+#        else:
+#            return False

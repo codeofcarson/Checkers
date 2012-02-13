@@ -4,37 +4,30 @@
 from board import *
 from minmaxSAM import *
 
-# define auxilary methods
+# Default Variables
+width = 6
+height = 6
+maxDepth = 5
+
 # Gets the move from the User
-def getUserMove():
+def getUserMove(b):
     statement1 = "Select one of your tokens eg. " + chr(b.whitelist[0][0]+97) + str(b.whitelist[0][1])
     print(statement1)
-    moveFrom = ""
     while True: # Loop until proper input
-        moveFrom = raw_input().strip().lower()
-        if moveFrom == 'help':
-            print(statement1)
-        elif not(len(moveFrom) == 2):
-            print "That is not a valid way of naming a piece, try again (eg. \'a2\')"
-        elif not((int(moveFrom[1]), ord(moveFrom[0]) - 97) in b.whitelist):
-            print "You do not own that piece"
-        else:
-            break
-    
-    moveFromTup = (int(moveFrom[1]), ord(moveFrom[0]) - 97)
-    
-    print("Select a place you would like to go (eg. e3)")
-    while True: # Loop until proper input
-        moveTo = raw_input().strip().lower()
-        if moveTo == 'help':
-            print("Select a place you would like to go (eg. e3)")
-        elif not(len(moveTo) == 2):
-            print ("That is not a location, try again (eg. \'a2\')")
-        else:
-            break
-            
-    moveToTup = (int(moveTo[1]), ord(moveTo[0]) - 97)
-    
+        move = []
+        move = raw_input().lower().split()
+        if not(len(move) == 2):
+            print "That is not a valid move, try again.", statement1
+            continue
+        moveFromTup = (int(move[0][1]), ord(move[0][0]) - 97)
+        moveToTup = (int(move[1][1]), ord(move[1][0]) - 97)
+        if moveFromTup in b.blacklist:
+            print "You do not own that piece, that is a black piece.", statement1
+            continue
+        elif not (moveFromTup in b.whitelist):
+            print "You do not own", moveFromTup, "please select one of.", b.whitelist
+            continue
+        break
     move = (moveFromTup, moveToTup, -1)
     return move
 
@@ -47,9 +40,6 @@ def getUserMove():
 #print("Enter a number between 0 and 7 for the difficulty setting. 7 = hardest "
 #    + "0 = dead easy:")
 #maxDepth = int(raw_input())
-width = 6
-height = 6
-maxDepth = 5
 
 b = board(width, height)
 mm = Minimax(b)
@@ -59,7 +49,7 @@ print("Welcome to checkers. Type help at any time for additional information")
 # Main game loop
 while b.gameWon == -1:
     # First it is the users turn
-    userMove = getUserMove()
+    userMove = getUserMove(b)
     b.moveWhite(*userMove)
     # Then it is the computers turn
     temp = mm.minimax()
@@ -74,11 +64,3 @@ while b.gameWon == -1:
     elif b.gameWon == b.BLACK:
         print "Black Wins\nGame Over"
         break
-    
-#Print the list of tokens
-#print "Blacklist:\n"
-#for piece in b.blacklist:
-#    print str(piece[0]) + " , " + str(piece[1]) + "\n"
-#print "Whitelist:\n"
-#for piece in b.whitelist:
-#    print str(piece[0]) + " , " + str(piece[1]) + "\n"
