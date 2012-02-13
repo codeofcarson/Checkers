@@ -2,38 +2,28 @@ from copy import deepcopy
 
 class Minimax(object):
     """
-        Base class for minimax games. Subclasses should override is_ended, is_max,
-        itermoves, and evaluate
+        Base class for minimax games. Subclasses should override is_ended, is_max, itermoves, 
+        and evaluate
     """
     def __init__(self, board):
         self.board = board
-        
-#    def justify(self, reason):
-#        """Adds a reason for why this move was selected"""
-#        if not hasattr(self, 'justification'):
-#            self.justification = [reason]
-#        else:
-#            self.justification.append(reason)
 
     def is_ended(self):
         """
-            Returns true if the game is over, false otherwise. Should be overridden
-            in subclasses.
+            Returns true if the game is over, false otherwise.
         """
         return self.board.gameWon >= 0
 
     def is_max(self):
         """
-            Returns true if this node is a max node. Should be overridden in
-            subclasses.
+            Returns true if this node is a max node, I.e. objective is to try to achieve a maximum 
+            value at this node.
         """
-        #TODO sketchy
         return self.board.turn == self.board.BLACK
 
     def itermoves(self):
         """
             Returns an iterable of all possible moves starting at the current state.
-            Should be overridden in subclasses.
         """
         if self.board.turn == self.board.BLACK:
             for move in self.board.iterBlackMoves():
@@ -48,8 +38,7 @@ class Minimax(object):
 
     def evaluate(self):
         """
-            Calculate the value of a game state and return it. Should be overridden
-            by subclasses.
+            Calculate the value of a game state and return it.
         """
         if self.board.gameWon == self.board.BLACK:
             return float('inf')
@@ -79,7 +68,7 @@ class Minimax(object):
 
     def minimax(self, depth=0, minimum=float('-inf'), maximum=float('inf')):
         """
-            Calculates the best possible move based on evaluate.  Returns a tuple
+            Calculates the best possible move based on evaluate.  Returns a tuple 
             (state, value, depth).
         """
         depth += 1
@@ -124,3 +113,11 @@ class Minimax(object):
                 win_move = draw_move
                 shortest = longest
             return (win_move, value, shortest)
+
+# For debugging        
+#    def justify(self, reason):
+#        """Adds a reason for why this move was selected"""
+#        if not hasattr(self, 'justification'):
+#            self.justification = [reason]
+#        else:
+#            self.justification.append(reason)

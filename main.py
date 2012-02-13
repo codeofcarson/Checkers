@@ -8,8 +8,8 @@ from minmax import *
 width = 6
 height = 6
 maxDepth = 5
+firstPlayer = 0
 
-# define auxilary methods
 # Gets the move from the User
 def getUserMove(b):
     statement1 = "Select one of your tokens eg. " + chr(b.whitelist[0][0]+97) + str(b.whitelist[0][1])
@@ -42,24 +42,27 @@ def getUserMove(b):
 #    + "0 = dead easy:")
 #maxDepth = int(raw_input())
 
-b = board(width, height)
+b = board(width, height, firstPlayer)
 b.printBoard()
-print("Welcome to checkers. Type help at any time for additional information")
+print("Welcome to checkers.")
 
 # Main game loop
 while b.gameWon == -1:
     # First it is the users turn
+    print "The turn is ", b.turn
     userMove = getUserMove(b)
     try:
         b.moveWhite(*userMove)
     except Exception:
         print "Invalid move"
         continue
+        
     # Then it is the computers turn
+    print "The turn is ", b.turn
     temp = minMax(b, maxDepth)
     b = temp[0]
     print "**********COMPUTER MOVE**********"
-    print "best move was", temp[1]
+    print "Computers best move was", temp[1]
     b.printBoard()
     if b.gameWon == b.WHITE:
         print "White Wins\nGame Over"

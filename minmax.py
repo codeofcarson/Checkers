@@ -5,21 +5,21 @@ def minMax(board, maxDepth):
     currentDepth = 0
     (tempBoard, miscVal) = minMove(board, currentDepth, maxDepth)
     if not tempBoard:
-        print "The returned board was Null, lowering depth by 1"
+#        print "The returned board was Null, lowering depth by 1"
         (tempBoard, miscVal) = minMax(board, maxDepth-1)
     #tempBoard.printBoard()
     return (tempBoard, miscVal)
     
 def maxMove(board, currentDepth, maxDepth):
-    print '===MAX MOVE==='
+#    print '===MAX MOVE==='
     if (board.gameWon <> -1) or (currentDepth >= maxDepth):
-        print 'LEAF NODE', board.gameWon
+#        print 'LEAF NODE', board.gameWon
         test = staticEval(board)
         if not board:
             raise Exception("MaxMove is a dick")
         return (board, test)
     else:
-        print 'NODE'
+#        print 'NODE'
         bestMove = float("-inf")
         bestBoard = None
         # Depending on the turn, we create an iterator for the appropriate player
@@ -61,8 +61,8 @@ def maxMove(board, currentDepth, maxDepth):
             return (bestBoard, bestMove)
         
 def minMove(board, currentDepth, maxDepth):
-    print '***MINMOVE***'
-    board.printBoard()
+#    print '***MINMOVE***'
+#    board.printBoard()
     if (board.gameWon <> -1) or (currentDepth >= maxDepth):
         if not board:
             raise Exception("MinMove is a dick")

@@ -23,7 +23,7 @@ class board(object):
         self.boardState = [[' '] * self.width for x in range(self.height)]
         self.gameWon = self.NOTDONE
         self.turn = firstPlayer
-        self.max_depth = 4
+        self.max_depth = 5
     
     # Generate an iterator for all of the moves
     def iterWhiteMoves(self):
@@ -59,6 +59,7 @@ class board(object):
             Handles the actual generation of moves for either black or white pieces
         """
         for move in moves:
+            # Regular Move
             targetx = piece[0] + move[0]
             targety = piece[1] + move[1]
             if targetx < 0 or targetx >= self.width or targety < 0 or targety >= self.height:
@@ -148,6 +149,9 @@ class board(object):
         self.printBoard()
 
     def printBoard(self):
+        """
+            Prints the game board to stdout
+        """
         print unicode(self)
         
     def __unicode__(self):

@@ -29,7 +29,6 @@ def getUserMove(b):
             print "You do not own", moveFromTup, "please select one of.", b.whitelist
             continue
         break
-
     move = (moveFromTup, moveToTup, -1)
     return move
 
@@ -51,17 +50,18 @@ print("Welcome to checkers.")
 # Main game loop
 while b.gameWon == -1:
     # First it is the users turn
+    print "The turn is ", b.turn
     userMove = getUserMove(b)
     try:
         b.moveWhite(*userMove)
     except Exception:
         print "Invalid move"
         continue
-        
+    
+    print "The turn is ", b.turn
     # Then it is the computers turn
     temp = mm.minimax()
     b = temp[0].board
-#    print b
     print "**********COMPUTER MOVE**********"
     print "Computers best move was", temp[1]
     b.printBoard()
