@@ -63,7 +63,7 @@ while b.gameWon == -1:
     temp = mm.minimax()
     b = temp[0].board
     print "**********COMPUTER MOVE**********"
-    print "Computers best move was", temp[1]
+    print "Computers best move was", temp[1], "at depth", temp[2]
     b.printBoard()
     if b.gameWon == b.WHITE:
         print "White Wins\nGame Over"

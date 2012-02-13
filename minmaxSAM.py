@@ -40,9 +40,12 @@ class Minimax(object):
         """
             Calculate the value of a game state and return it.
         """
+#        self.board.printBoard()
         if self.board.gameWon == self.board.BLACK:
+#            print "INF"
             return float('inf')
         elif self.board.gameWon == self.board.WHITE:
+#            print "NEG-INF"
             return float('-inf')
         #return 0
         score = 0
@@ -65,6 +68,7 @@ class Minimax(object):
                 distance += dx**2 + dy**2
         distance /= len(pieces)
         score = 1.0/distance * scoremod
+#        print score
 
     def minimax(self, depth=0, minimum=float('-inf'), maximum=float('inf')):
         """

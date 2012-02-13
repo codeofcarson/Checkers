@@ -74,17 +74,21 @@ class board(object):
                     continue
                 elif self.turn == self.WHITE and white:
                     continue
-                for move in moves:
-                    # Jump 
-                    jumpx = targetx + move[0]
-                    jumpy = targety + move[1]
-                    if jumpx < 0 or jumpx >= self.width or jumpy < 0 or jumpy >= self.height:
-                        continue
-                    jump = (jumpx, jumpy)
-                    black = jump in self.blacklist
-                    white = jump in self.whitelist
-                    if not black and not white:
-                        yield (piece, jump, self.turn)                   
+#                print "moves used to jump", moves
+                #for move in moves:
+                # Jump proceeds by adding the same movement in order to jump over the opposing 
+                # piece on the checkerboard
+                jumpx = target[0] + move[0]
+                jumpy = target[1] + move[1]
+                # If the jump is going to be out of bounds don't do it.
+                if jumpx < 0 or jumpx >= self.width or jumpy < 0 or jumpy >= self.height:
+                    continue
+                jump = (jumpx, jumpy)
+                # Check that there is nothing in the jumpzone
+                black = jump in self.blacklist
+                white = jump in self.whitelist
+                if not black and not white:
+                    yield (piece, jump, self.turn)                   
     
     def updateBoard(self):
         """
