@@ -23,7 +23,7 @@ class board(object):
         self.boardState = [[' '] * self.width for x in range(self.height)]
         self.gameWon = self.NOTDONE
         self.turn = firstPlayer
-        self.max_depth = 5
+        self.maxDepth = 10
     
     # Generate an iterator for all of the moves
     def iterWhiteMoves(self):
@@ -62,20 +62,22 @@ class board(object):
             # Regular Move
             targetx = piece[0] + move[0]
             targety = piece[1] + move[1]
+            # If the move is out of bounds don't move
             if targetx < 0 or targetx >= self.width or targety < 0 or targety >= self.height:
                 continue
             target = (targetx, targety)
+            # Check that there is nothing in the way of moving to the target
             black = target in self.blacklist
             white = target in self.whitelist
             if not black and not white:
                 yield (piece, target, self.NOTDONE)
+            # There was something in the way, can we jump it?
             else:
+                # It has to be of the opposing color to jump
                 if self.turn == self.BLACK and black:
                     continue
                 elif self.turn == self.WHITE and white:
                     continue
-#                print "moves used to jump", moves
-                #for move in moves:
                 # Jump proceeds by adding the same movement in order to jump over the opposing 
                 # piece on the checkerboard
                 jumpx = target[0] + move[0]
@@ -173,88 +175,25 @@ class board(object):
         # Print the boards rows
         for num, row in enumerate(self.boardState[:-1]):
             lines.append(chr(num+65) + u' │ ' + u' │ '.join(row) + u' │')
-#            lines.append(str(num) + u' │ ' + u' │ '.join(row) + u' │') # debugging
             lines.append(u'  ├' + (u'───┼' * (self.width-1)) + u'───┤')
         
         #Print the last row
         lines.append(chr(self.height+64) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │')
-#        lines.append(str(self.height-1) + u' │ ' + u' │ '.join(self.boardState[-1]) + u' │') # debugging
 
         # Prints the final line in the board
         lines.append(u'  ╰' + (u'───┴' * (self.width-1)) + u'───╯')
         return '\n'.join(lines)
 
-############# DEBUGGING
-#############
-    def getWin(self):
-        return self.g
-    
-    def setWin(self, val):
-#        if val == 0:
-#            raise Exception("Game won by white")
-        self.g = val
-
-    gameWon=property(getWin, setWin)
-#############
-#############
-
-
-"""Deprecated"""
-#    def iterWhitePieceOld(self, piece):
-#        """Creates an iterable list of moves for a white piece"""
-#        # White pieces can only move up the board
-#        possibleMove1 = (piece[0]+1, piece[1]-1)
-#        possibleMove2 = (piece[0]-1, piece[1]-1)
-#        for move in (possibleMove1, possibleMove2):
-#            # The move must not go outside the bounds of the board or move to 
-#            # a location where another piece is already located
-#            if (move[0] > -1 and move[0] < self.width):
-#                if (move[1] > -1 and move[1] < self.height):
-#                    if not(self.contains(move[0], move[1])):
-#                        yield (piece, move, self.NOTDONE)
-#                    # Jump condition (left)
-#                    elif (not(self.contains(move[0]-1, move[1]-1)) and (piece[0] == (move[0]+1)) ):                        
-#                        if (move[0] > 0 and move[0]-1 < self.width):
-#                            if (move[1] > 0 and move[1]-1 < self.height):
-#                                yield (piece, (move[0]-1, move[1]-1), self.WHITE)
-#                    # Jump condition (right)
-#                    elif (not(self.contains(move[0]+1, move[1]-1)) and (piece[0] == (move[0]-1)) ):
-#                        if (move[0] > -1 and move[0]+1 < self.width):
-#                            if (move[1] > -1 and move[1]-1 < self.height):
-#                                yield (piece, (move[0]+1, move[1]-1), self.WHITE)
-##                    else:
-##                        print move, "was eliminated from interWhitePiece"
-#
-#    # Creates an iterable list of moves for a black piece
-#    def iterBlackPieceOld(self, piece):
-#        # White pieces can only move up the board
-#        possibleMove1 = (piece[0]+1, piece[1]+1)
-#        possibleMove2 = (piece[0]-1, piece[1]+1)
-#        for move in (possibleMove1, possibleMove2):
-#            if (move[0] > -1 and move[0] < self.width):
-#                if (move[1] > -1 and move[1] < self.height):
-#                    if not(self.contains(move[0], move[1])):
-#                        yield (piece, move, self.NOTDONE)
-#                    # We can only jump White pieces
-#                    elif move in self.whitelist:
-#                        # Jump condition (left)
-#                        if (not(self.contains(move[0]-1, move[1]+1)) and (piece[0] == (move[0]+1)) ):
-#                            if (move[0] > 0 and move[0]-1 < self.width):
-#                                if (move[1] > 0 and move[1]+1 < self.height):
-#                                    yield (piece, (move[0]-1, move[1]+1), self.BLACK)
-#                        # Jump condition (right)
-#                        elif (not(self.contains(move[0]+1, move[1]+1)) and (piece[0] == (move[0]-1))):
-#                            if (move[0] > -1 and move[0]+1 < self.width):
-#                                if (move[1] > -1 and move[1]+1 < self.height):
-#                                    yield (piece, (move[0]+1, move[1]+1), self.BLACK)
-##                    else:
-##                        print move, "was eliminated from interBlackPiece"
+############## DEBUGGING
+##############
+#    def getWin(self):
+#        return self.g
 #    
-#    # Returns True if there is a piece at that position 
-#    def contains(self, x, y):
-#        if ((x,y) in self.blacklist):
-#            return True
-#        elif ((x,y) in self.whitelist):
-#            return True
-#        else:
-#            return False
+#    def setWin(self, val):
+##        if val == 0:
+##            raise Exception("Game won by white")
+#        self.g = val
+
+#    gameWon=property(getWin, setWin)
+##############
+##############
