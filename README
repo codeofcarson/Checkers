@@ -4,3 +4,7 @@ This is under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unpo
 This license can be viewed or obtained at http://creativecommons.org/licenses/by-nc-sa/3.0/
 
 To run, from a unix terminal type "$ python main.py"
+
+Known issues:
+	Computer concedes by crashing the game
+	User jumping yet to be implemented
